@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized</title>
+    <script>
+        async function fetchScript() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const scriptId = urlParams.get("id");
+            if (!scriptId) return;
+
+            // Fetch scripts.json
+            const response = await fetch("scripts.json");
+            const scripts = await response.json();
+
+            if (!scripts[scriptId]) return;
+
+            const userAgent = navigator.userAgent;
+            if (userAgent.includes("Roblox")) {
+                document.body.innerHTML = `<pre>${scripts[scriptId]}</pre>`;
+            }
+        }
+
+        fetchScript();
+    </script>
+</head>
+<body>
+    <h1>🚫 Unauthorized 🚫</h1>
+    <p>Close This Page!</p>
+</body>
+</html>
