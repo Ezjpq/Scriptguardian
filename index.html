@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Guardian</title>
+    <script>
+        async function generateLink() {
+            const scriptContent = document.getElementById("scriptInput").value;
+            if (!scriptContent.trim()) return alert("Enter a script!");
+
+            // Generate a random script ID
+            const scriptId = Math.random().toString(36).substr(2, 10);
+
+            // Fetch existing scripts.json
+            let scripts = {};
+            try {
+                const response = await fetch("scripts.json");
+                scripts = await response.json();
+            } catch (error) {
+                console.log("No existing scripts.json found.");
+            }
+
+            // Add the new script
+            scripts[scriptId] = scriptContent;
+
+            // Show the generated link
+            const link = `${window.location.origin}/script.html?id=${scriptId}`;
+            document.getElementById("generatedLink").innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+
+            // Save to GitHub (requires GitHub Actions)
+            saveScriptToGitHub(scripts);
+        }
+
+        async function saveScriptToGitHub(scripts) {
+            const scriptData = JSON.stringify(scripts, null, 2);
+            // GitHub Actions will update scripts.json (Explained below)
+        }
+    </script>
+</head>
+<body>
+    <h1>Script Guardian</h1>
+    <textarea id="scriptInput" placeholder="Enter Your Roblox Script Here!"></textarea><br>
+    <button onclick="generateLink()">Generate</button>
+    <p id="generatedLink"></p>
+</body>
+</html>
